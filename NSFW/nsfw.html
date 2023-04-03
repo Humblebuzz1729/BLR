@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>NSFW Quiz</title>
+        <style>
+            @font-face {
+                src: url('bold.ttf');
+                font-family: bold;
+            }
+            @font-face {
+                src: url('regular.ttf');
+                font-family: regular;
+            }
+            body {
+                background-image: url('background.png');
+                font-family: regular;
+            }
+            .container {
+                background-color: rgba(40, 40, 60, 0.8);
+                color: rgb(220, 220, 240);
+                width: 60vw;
+                padding: 5vh 5vw 5vh 5vw;
+                margin: 15vh 15vw 15vh 15vw;
+                text-align: center;
+            }
+            h1 {
+                font-family: bold;
+                font-size: 5vh;
+            }
+            p {
+                font-size: 3vh;
+            }
+            button {
+                background-color: rgb(120, 120, 140);
+                color: rgb(240, 240, 240);
+                width: 12vw;
+                height: 6vh;
+                border: none;
+                outline: none;
+                font-family: regular;
+                font-size: 2vh;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+            img {
+                height: 20vh;
+                width: auto;
+                margin: 5vh 0vw 5vh 0vw;
+            }
+        </style>
+        <script>
+            var template = [
+                ['_____ is a type of non-penetrative sex where the penis is placed between the receiving partner\'s thighs and friction is generated via thrusting.', ['frigging', 'freaking', 'fracking', 'wanking'], 1],
+                ['A brand used the given image to advertise their product X. What is this product X?', ['trimmer', 'IUD', 'condom', 'pregnancy test'], 2],
+                ['_____ is when a person with a penis has an orgasm and ejaculates onto their partner\'s chest area.', ['pearl necklace', 'anti-milk', 'jewel patch', 'R-spot'], 3],
+                ['In June 2013, 800 condoms were used for the creation of a public display sculpture. In which city was this sculpture displayed?', ['Madrid', 'New York', 'Los Angeles', 'Paris'], 4],
+                ['The movie Veere Di Wedding was controversial for the depiction of masturbation by the character played by the actress _____.', ['Swara Bhasker', 'Kareena Kapoor', 'Sonam Kapoor', 'Shikhar Talsania'], 5],
+                ['Which of the following brands had to undergo a logo change after their old logo became controversial for bearing a similarity to a vagina?', ['Myntra', 'Swiggy', 'Playboy', 'Toyota'], 6],
+                ['X is a fake STI that was claimed to have turned the labia blue and mimics the symptoms of chlamydia, gonnorrhea, and trichomoniasis. Which food item was X named after?', ['Waffle', 'Guacamole', 'Macaron', 'Pancake'], 7],
+                ['The r/trees subreddit is infamous for being a community centred around the substance _____ unlike what its name suggests.', ['cannabis', 'LSD', 'PSP', 'MDMA'], 8],
+                ['_____ was an airlines that ran between 2003 and 2006 and was infamous for having flight attendants dressed up in an objectifying manner.', ['Hooters Air', 'SpiceJet', 'Frontier Airlines', 'Hawaiian Airlines'], 9],
+                ['_____ was a Hindu mythological king who is known to have two mothers but no father. His name is claimed to have originated from the Sanskrit word for vulva.', ['Bhagiratha', 'Ajatasatru', 'Pulakesi', 'Harshavardhana'], 10]
+            ];
+            var set = [];
+            var temp_length = template.length;
+            for (var i = 0; i < temp_length; i ++) {
+                var index = Math.floor (Math.random () * template.length);
+                var options = [];
+                var opt_length = template [index] [1].length;
+                var answer = 0;
+                var check = true;
+                for (var j = 0; j < opt_length; j ++) {
+                    var num = Math.floor (Math.random () * template [index] [1].length);
+                    options.push (template [index] [1] [num]);
+                    template [index] [1].splice (num, 1);
+                    if (num == 0 && check) {
+                        answer = j;
+                        check = false;
+                    }
+                }
+                var question = [template [index] [0], options, answer, template [index] [2]];
+                set.push (question);
+                template.splice (index, 1);
+            }
+            var current = -1;
+            var attempted = 0;
+            var correct = 0;
+            var state = true;
+            setup = function () {
+                current ++;
+                question = document.getElementById ('question');
+                question.innerHTML = set [current] [0];
+                for (var i = 0; i < set [current] [1].length; i ++) {
+                    option = document.getElementById ('opt-' + (i + 1));
+                    option.innerHTML = set [current] [1] [i];
+                    option.setAttribute ('style', 'background-color: rgb(120, 120, 140)');
+                }
+                image = document.getElementById ('image');
+                image.setAttribute ('src', 'image-' + set [current] [3] + '.png');
+            }
+            attempt = function (index) {
+                if (! state) {
+                    return;
+                }
+                attempted ++;
+                if (index == set [current] [2]) {
+                    correct ++;
+                }
+                document.getElementById ('opt-' + (index + 1)).setAttribute ('style', 'background-color: rgb(237, 137, 128)');
+                document.getElementById ('opt-' + (set [current] [2] + 1)).setAttribute ('style', 'background-color: rgb(40, 212, 92)');
+                document.getElementById ('attempted').innerHTML = attempted;
+                document.getElementById ('correct').innerHTML = correct;
+                if (current != set.length - 1) {
+                    setTimeout (setup, 1500);
+                } else {
+                    state = false;
+                }
+            }
+            setTimeout (setup, 100);
+        </script>
+    </head>
+    <body>
+        <div class = 'container'>
+            <h1>The Better NSFW Quiz</h1>
+            <p id = 'question'></p>
+            <img id = 'image'><br>
+            <button id = 'opt-1' onclick = 'attempt (0)'></button>
+            <button id = 'opt-2' onclick = 'attempt (1)'></button>
+            <button id = 'opt-3' onclick = 'attempt (2)'></button>
+            <button id = 'opt-4' onclick = 'attempt (3)'></button>
+            <p>Correct - <span id = 'correct'>0</span> | <span id = 'attempted'>0</span></p>
+        </div>
+    </body>
+</html>
